@@ -133,7 +133,13 @@ function filterProducts(category) {
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.classList.add('active');
+    
+    // Find and activate the clicked button
+    const clickedButton = Array.from(document.querySelectorAll('.category-btn'))
+        .find(btn => btn.textContent.toLowerCase().includes(category === 'all' ? 'all' : category.replace('-', ' ')));
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
     
     displayProducts(category);
 }
@@ -301,35 +307,8 @@ function loadCart() {
 function showNotification(message) {
     // Create notification element
     const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: #28a745;
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        z-index: 3000;
-        animation: slideIn 0.3s ease-out;
-    `;
+    notification.className = 'notification';
     notification.textContent = message;
-    
-    // Add animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-    document.head.appendChild(style);
     
     document.body.appendChild(notification);
     
@@ -423,20 +402,4 @@ window.addEventListener('load', function() {
         section.style.opacity = '0';
         observer.observe(section);
     });
-    
-    // Add fade in animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    `;
-    document.head.appendChild(style);
 });
